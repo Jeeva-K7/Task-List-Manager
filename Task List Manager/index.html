@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taskManagerApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Task List Manager</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div ng-controller="TaskController as taskCtrl" class="container">
+        <h1>Task List Manager</h1>
+        <div ng-repeat="list in taskCtrl.lists" class="task-list">
+            <h2 ng-click="taskCtrl.editListName(list)" ng-hide="list.editingName">{{ list.name }}</h2>
+            <input type="text" ng-model="list.updatedName" ng-show="list.editingName">
+            <button class="mainBtn" ng-click="taskCtrl.saveListName(list)" ng-show="list.editingName">Save</button>
+            <button class="mainBtn" ng-click="taskCtrl.cancelEditListName(list)" ng-show="list.editingName">Cancel</button>
+            <ul>
+                <li ng-repeat="task in list.tasks" ng-class="{ 'completed': task.completed }">
+                    <label class="custom-checkbox">
+                        <input type="checkbox" ng-model="task.completed" ng-click="taskCtrl.toggleTaskCompletion(task)">
+                        <span class="custom-checkbox-span"></span>
+                    </label>
+                    <span ng-if="!task.editing" class="task-name" ng-class="{ 'completed': task.completed }">{{ task.name }}</span>
+                    <input type="text" ng-model="task.updatedName" ng-if="task.editing">
+                    <button class="mainBtn" ng-click="taskCtrl.toggleEditTask(task)">{{ task.editing ? 'Save' : 'Edit' }}</button>
+                    <button class="mainBtn" ng-click="taskCtrl.deleteTask(task, list)" ng-if="!task.editing">Delete</button>
+                </li>
+            </ul>
+            <form ng-submit="taskCtrl.addTask(list)">
+                <input type="text" ng-model="list.newTask" placeholder="Enter task...">
+                <button class="mainBtn" type="submit">Add Task</button>
+            </form>
+            <button class="delete-list-btn" ng-click="taskCtrl.deleteList(list)">Delete List</button>
+        </div>
+        <form ng-submit="taskCtrl.addList()">
+            <input type="text" ng-model="taskCtrl.newList" placeholder="Enter list name...">
+            <button type="submit">Add List</button>
+        </form>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="js/app.js"></script>
+
+    <div class="empty">
+        <br><br>
+        <br><br>
+        <br><br>
+    </div>
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Task List Manager</p>
+            <p id="creator">Created by Jeeva K</p>
+        </div>
+    </footer>
+</body>
+</html>
